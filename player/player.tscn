@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6pc1qkcmpd58"]
+
+[ext_resource type="Script" path="res://player/player_movement.gd" id="1_x7x3u"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wss6t"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_x7x3u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_wss6t")
+
+[node name="Head" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+
+[node name="RayCast3D" type="RayCast3D" parent="Head"]
+
+[node name="SelectedBlock" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
