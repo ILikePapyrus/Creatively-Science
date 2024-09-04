@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dvoryxnm5mhxe"]
+
+[ext_resource type="Texture2D" uid="uid://di513disexdua" path="res://asset/texture/block/grass_block_side.png" id="1_u176j"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_6jbnm"]
+diffuse_texture = ExtResource("1_u176j")
+
+[resource]
+albedo_texture = SubResource("CanvasTexture_6jbnm")

@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cj2mamqfxo1vd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_xb1m6"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_c38ne"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c2ysb"]
+
+[sub_resource type="MeshLibrary" id="MeshLibrary_ayrtj"]
+resource_local_to_scene = true
+item/0/name = "Grass"
+item/0/mesh = SubResource("BoxMesh_xb1m6")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/shapes = [SubResource("BoxShape3D_c2ysb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
+item/0/preview = SubResource("ImageTexture_c38ne")
+
+[node name="BlockRenderer" type="Node3D"]
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = SubResource("MeshLibrary_ayrtj")
