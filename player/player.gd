@@ -1,75 +1,36 @@
-class_name Player extends CharacterBody3D
+extends CharacterBody3D
 
-@export_category("Player")
-@export_range(1, 35, 1) var speed: float = 10 # m/s
-@export_range(10, 400, 1) var acceleration: float = 100 # m/s^2
+# Speed
+@export var move_speed : float = 10.0
+@export var vert_speed : float = 10.0
 
-@export_range(0.1, 3.0, 0.1) var jump_height: float = 1 # m
-@export_range(0.1, 3.0, 0.1, "or_greater") var camera_sens: float = 1
+func _ready():
+	# Initialize player node
+	pass
 
-var jumping: bool = false
-var mouse_captured: bool = false
+func _physics_process(_delta):
+	# Get input (WASD)
+	if Input.is_action_pressed("move_forward"):
+		velocity.z -= 1
+	if Input.is_action_pressed("move_back"):
+		velocity.z += 1
+	if Input.is_action_pressed("move_left"):
+		velocity.x -= 1
+	if Input.is_action_pressed("move_right"):
+		velocity.x += 1
 
-var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+	# Get input (Q/E)
+	if Input.is_action_pressed("move_up"):
+		velocity.y += 1
+	if Input.is_action_pressed("move_down"):
+		velocity.y -= 1
 
-var move_dir: Vector2 # Input direction for movement
-var look_dir: Vector2 # Input direction for look/aim
+	# Normalize velocity vector -> Normal speed in diagonal movement
+	velocity = velocity.normalized() * move_speed
 
-var walk_vel: Vector3 # Walking velocity 
-var grav_vel: Vector3 # Gravity velocity 
-var jump_vel: Vector3 # Jumping velocity
+	# Apply vertical movement speed
+	if velocity.y != 0:
+		velocity.y = vert_speed if velocity.y > 0 else -vert_speed
 
-@onready var camera: Camera3D = $Camera
-
-func _ready() -> void:
-	capture_mouse()
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		look_dir = event.relative * 0.001
-		if mouse_captured: _rotate_camera()
-	if Input.is_action_just_pressed("jump"): jumping = true
-	if Input.is_action_just_pressed("exit"): get_tree().quit()
-
-func _physics_process(delta: float) -> void:
-	if mouse_captured: _handle_joypad_camera_rotation(delta)
-	velocity = _walk(delta) + _gravity(delta) + _jump(delta)
+	# Apply movement to CharacterBody3D
 	move_and_slide()
-
-func capture_mouse() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	mouse_captured = true
-
-func release_mouse() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	mouse_captured = false
-
-func _rotate_camera(sens_mod: float = 1.0) -> void:
-	camera.rotation.y -= look_dir.x * camera_sens * sens_mod
-	camera.rotation.x = clamp(camera.rotation.x - look_dir.y * camera_sens * sens_mod, -1.5, 1.5)
-
-func _handle_joypad_camera_rotation(delta: float, sens_mod: float = 1.0) -> void:
-	var joypad_dir: Vector2 = Input.get_vector("look_left","look_right","look_up","look_down")
-	if joypad_dir.length() > 0:
-		look_dir += joypad_dir * delta
-		_rotate_camera(sens_mod)
-		look_dir = Vector2.ZERO
-
-func _walk(delta: float) -> Vector3:
-	move_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var _forward: Vector3 = camera.global_transform.basis * Vector3(move_dir.x, 0, move_dir.y)
-	var walk_dir: Vector3 = Vector3(_forward.x, 0, _forward.z).normalized()
-	walk_vel = walk_vel.move_toward(walk_dir * speed * move_dir.length(), acceleration * delta)
-	return walk_vel
-
-func _gravity(delta: float) -> Vector3:
-	grav_vel = Vector3.ZERO if is_on_floor() else grav_vel.move_toward(Vector3(0, velocity.y - gravity, 0), gravity * delta)
-	return grav_vel
-
-func _jump(delta: float) -> Vector3:
-	if jumping:
-		if is_on_floor(): jump_vel = Vector3(0, sqrt(4 * jump_height * gravity), 0)
-		jumping = false
-		return jump_vel
-	jump_vel = Vector3.ZERO if is_on_floor() else jump_vel.move_toward(Vector3.ZERO, gravity * delta)
-	return jump_vel

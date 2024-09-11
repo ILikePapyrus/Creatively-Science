@@ -1,12 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://2objbn3nj5mk"]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_1yned"]
+[ext_resource type="Script" path="res://player/player[Old].gd" id="1_u721r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5oeti"]
 height = 2.00051
 
 [node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_1yned")
+motion_mode = 1
+script = ExtResource("1_u721r")
 
 [node name="Pivot" type="Node3D" parent="."]
 

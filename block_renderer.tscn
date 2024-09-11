@@ -1,22 +1,19 @@
 [gd_scene load_steps=5 format=3 uid="uid://cj2mamqfxo1vd"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_xb1m6"]
+[ext_resource type="Script" path="res://block_renderer.gd" id="1_edgab"]
 
-[sub_resource type="ImageTexture" id="ImageTexture_c38ne"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_yiquw"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_c2ysb"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eb71h"]
 
-[sub_resource type="MeshLibrary" id="MeshLibrary_ayrtj"]
-resource_local_to_scene = true
-item/0/name = "Grass"
-item/0/mesh = SubResource("BoxMesh_xb1m6")
-item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-item/0/shapes = [SubResource("BoxShape3D_c2ysb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
-item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-item/0/navigation_layers = 1
-item/0/preview = SubResource("ImageTexture_c38ne")
+[sub_resource type="BoxShape3D" id="BoxShape3D_yc2kc"]
 
-[node name="BlockRenderer" type="Node3D"]
+[node name="MeshInstance3D" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_yiquw")
+script = ExtResource("1_edgab")
 
-[node name="GridMap" type="GridMap" parent="."]
-mesh_library = SubResource("MeshLibrary_ayrtj")
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_eb71h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_yc2kc")
